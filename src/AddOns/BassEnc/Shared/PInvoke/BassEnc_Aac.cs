@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -7,9 +6,9 @@ namespace ManagedBass.Enc
 {
 
     /// <summary>
-    /// BassEnc_Acc is an extension to the BassEnc add-on that allows BASS channels to be Acc encoded, with support for AACENC options.
+    /// BassEnc_Aac is an extension to the BassEnc add-on that allows BASS channels to be Aac encoded, with support for AACENC options.
     /// </summary>
-    public static class BassEnc_Acc
+    public static class BassEnc_Aac
     {
 #if __IOS__
         const string DllName = "__Internal";
@@ -26,7 +25,7 @@ namespace ManagedBass.Enc
         public static Version Version => Extensions.GetVersion(BASS_Encode_AAC_GetVersion());
 
         [DllImport(DllName, CharSet = CharSet.Unicode)]
-        static extern int BASS_Encode_AAC_Start(int Handle, string Options, EncodeFlags Flags, EncodeProcedure Procedure, IntPtr User);
+        static extern int BASS_Encode_AAC_Start(int Handle, string Options, EncodeFlags Flags, EncodeProcedureEx ProcedureEx, IntPtr User);
 
         /// <summary>
         /// Start Aac Encoding to <see cref="EncodeProcedure"/>.
@@ -38,7 +37,7 @@ namespace ManagedBass.Enc
         /// Anything else that is included will be ignored.
         /// </param>
         /// <param name="Flags">A combination of <see cref="EncodeFlags"/>.</param>
-        /// <param name="Procedure">Optional callback function to receive the encoded data... null = no callback.</param>
+        /// <param name="ProcedureEx">Optional callback function to receive the encoded data... null = no callback.</param>
         /// <param name="User">User instance data to pass to the callback function.</param>
         /// <returns>The encoder handle is returned if the encoder is successfully started, else 0 is returned. Use <see cref="Bass.LastError"/> to get the error code</returns>
         /// <remarks>
@@ -50,9 +49,9 @@ namespace ManagedBass.Enc
         /// <exception cref="Errors.Handle"><paramref name="Handle"/> is not valid</exception>
         /// <exception cref="Errors.SampleFormat">The channel's sample format is not supported by the encoder.</exception>
         /// <exception cref="Errors.Unknown">Some other mystery problem! </exception>
-        public static int Start(int Handle, string Options, EncodeFlags Flags, EncodeProcedure Procedure, IntPtr User)
+        public static int Start(int Handle, string Options, EncodeFlags Flags, EncodeProcedureEx ProcedureEx, IntPtr User)
         {
-            return BASS_Encode_AAC_Start(Handle, Options, Flags | EncodeFlags.Unicode, Procedure, User);
+            return BASS_Encode_AAC_Start(Handle, Options, Flags | EncodeFlags.Unicode, ProcedureEx, User);
         }
 
         [DllImport(DllName, CharSet = CharSet.Unicode)]
